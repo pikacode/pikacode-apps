@@ -50,6 +50,33 @@ a { color: var(--accent); overflow-wrap: anywhere; }
 .note { color: var(--secondary); font-size: 14px; }
 .links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
 
+.app-download {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px;
+  gap: 24px;
+  align-items: center;
+}
+
+.app-download h2 { margin-bottom: 8px; }
+.app-name { margin-bottom: 4px; font-size: 20px; font-weight: 600; }
+
+.app-store-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.app-store-link:hover { opacity: 0.9; }
+
+.app-qr { margin: 0; text-align: center; }
+.app-qr img { display: block; width: 160px; height: 160px; margin: 0 auto 8px; }
+.app-qr figcaption { color: var(--secondary); font-size: 13px; }
+
 footer {
   margin-top: 28px;
   color: var(--secondary);
@@ -60,4 +87,6 @@ footer {
 @media (max-width: 480px) {
   main { padding-top: 36px; }
   section { padding: 20px; }
+  .app-download { grid-template-columns: 1fr; }
+  .app-download-copy { text-align: center; }
 }
