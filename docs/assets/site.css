@@ -45,7 +45,7 @@ section {
 }
 
 h2 { margin-bottom: 12px; font-size: 20px; line-height: 1.35; }
-ul { margin: 0; padding-left: 1.4em; }
+ul, ol { margin: 0; padding-left: 1.4em; }
 a { color: var(--accent); overflow-wrap: anywhere; }
 .note { color: var(--secondary); font-size: 14px; }
 .links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
