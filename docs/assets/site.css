@@ -84,6 +84,8 @@ footer {
   text-align: center;
 }
 
+footer a { color: var(--secondary); }
+
 @media (max-width: 480px) {
   main { padding-top: 36px; }
   section { padding: 20px; }
