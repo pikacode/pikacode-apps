@@ -30,6 +30,16 @@
       btn.href = url;
       btn.textContent = name ? '打开设计串：' + name : '打开设计串';
       btn.hidden = false;
+      // 桌面端接手后浏览器会失去焦点：这时关掉这个标签页。
+      // 这个标签页是画布用新标签打开的、只有一条历史，浏览器允许脚本关闭；关不掉时按钮留着备用。
+      var done = false;
+      function closeSoon() {
+        if (done) return;
+        done = true;
+        setTimeout(function () { window.close(); }, 300);
+      }
+      window.addEventListener('blur', closeSoon);
+      document.addEventListener('visibilitychange', function () { if (document.hidden) closeSoon(); });
       location.href = url;
     })();
   </script>
