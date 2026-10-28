@@ -18,12 +18,19 @@
         <p><input id="pw" type="password" inputmode="numeric" autocomplete="off" placeholder="密码" style="font-size:20px;padding:8px;width:10em"></p>
         <p><button type="submit" style="font-size:18px;padding:8px 20px">下载</button></p>
       </form>
+      <p id="build" class="note"></p>
       <p id="msg" class="note"></p>
     </section>
   </main>
   <script>
     const msg = document.getElementById('msg');
     let data = null;
+    // 构建时间（日本时间）写在 build.json，下载文件名和页面都用它，一眼认出是哪一版
+    let apkName = 'JSTQB.apk';
+    fetch('build.json', { cache: 'no-store' }).then(r => r.json()).then(b => {
+      apkName = 'JSTQB-' + b.stamp + '.apk';
+      document.getElementById('build').textContent = '当前版本：' + apkName + '（dev ' + b.commit + '）';
+    }).catch(() => {});
     async function load() {
       if (data) return data;
       const res = await fetch('jstqb.bin', { cache: 'no-store' });
@@ -61,9 +68,9 @@
         }
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([apk], { type: 'application/vnd.android.package-archive' }));
-        a.download = 'JSTQB.apk';
+        a.download = apkName;
         a.click();
-        msg.textContent = '已保存 JSTQB.apk，在通知栏或「下载」里点它安装。';
+        msg.textContent = '已保存 ' + apkName + '，在通知栏或「下载」里点它安装。';
       } catch (err) {
         msg.textContent = err.message;
       }
