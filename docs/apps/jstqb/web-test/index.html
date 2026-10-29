@@ -26,6 +26,8 @@
     const APP = new URL('app/', location.href).pathname;
     const CACHE = 'jstqb-web-test';
     const KEY = 'jstqbWebTestBuild';
+    // 输对过的口令记在本机：合进 dev 就自动发新版，每次都让人重输太烦；新版直接用它下载解密（只是轻量门槛）。
+    const PW = 'jstqbWebTestPw';
     const msg = document.getElementById('msg');
     const buildLine = document.getElementById('build');
     let build = null;
@@ -113,8 +115,18 @@
       } catch (_) {
         buildLine.textContent = '读不到构建时间';
       }
-      // 本机已有这一版就直接进 App，不再停在密码页。
-      if (build && await ready() && 'serviceWorker' in navigator) await open();
+      // 本机已有这一版就直接进 App；有新版且记着口令就自动更新后进，不再停在密码页。
+      if (!build || !('serviceWorker' in navigator)) return;
+      if (await ready()) return open();
+      const saved = localStorage.getItem(PW);
+      if (!saved) return;
+      try {
+        if (await install(await download(), saved)) return open();
+        localStorage.removeItem(PW);
+        msg.textContent = '';
+      } catch (err) {
+        msg.textContent = err.message;
+      }
     })();
 
     document.getElementById('f').addEventListener('submit', async (e) => {
@@ -122,8 +134,10 @@
       try {
         if (!('serviceWorker' in navigator)) throw new Error('这个浏览器不支持（无痕模式可能关了 service worker）');
         if (!(build && await ready())) {
-          const ok = await install(await download(), document.getElementById('pw').value);
+          const password = document.getElementById('pw').value;
+          const ok = await install(await download(), password);
           if (!ok) { msg.textContent = '密码不对'; return; }
+          localStorage.setItem(PW, password);
         }
         await open();
       } catch (err) {
