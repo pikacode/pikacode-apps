@@ -39,7 +39,9 @@
       try {
         if (localStorage.getItem(KEY) !== build) return false;
         const c = await caches.open(CACHE);
-        return !!(await c.match(APP + 'index.html'));
+        const mark = await c.match(APP + '__build');
+        // 和 sw.js 看同一个记号，两边判断一致，不会来回跳。
+        return !!(await c.match(APP + 'index.html')) && !!mark && (await mark.text()) === build;
       } catch (_) {
         return false;
       }
