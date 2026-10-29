@@ -86,6 +86,8 @@
         const body = plain.slice(start + offset, start + offset + length);
         await c.put(APP + path, new Response(body, { headers: { 'Content-Type': type } }));
       }
+      // 给 sw.js 看的版本记号：直接打开 app/ 时它拿这个和线上 build.json 比，旧了转回入口页。
+      await c.put(APP + '__build', new Response(head.build));
       localStorage.setItem(KEY, head.build);
       return true;
     }
