@@ -98,9 +98,9 @@
       msg.textContent = '启动中…';
       // 不能等 serviceWorker.ready：它只等管着当前页（入口页）的那个，sw.js 只管 app/，会一直等下去。
       const reg = await navigator.serviceWorker.register('sw.js', { scope: APP });
-      const worker = reg.installing || reg.waiting || reg.active;
-      if (worker && worker.state !== 'activated') {
-        await new Promise((done) => worker.addEventListener('statechange', () => { if (worker.state === 'activated') done(); }));
+      // 等新 sw.js 生效：状态可能在挂监听前就变了，所以轮询查，最多等 5 秒，到时间照样进（旧的那个也能用缓存）。
+      for (let i = 0; i < 50 && !(reg.active && reg.active.state === 'activated' && !reg.installing && !reg.waiting); i++) {
+        await new Promise((done) => setTimeout(done, 100));
       }
       // 用 replace：入口页不留在浏览历史里，App 里侧滑返回不会退回密码页。
       location.replace(APP);
