@@ -41950,7 +41950,7 @@ s=q}for(;;)switch(s){case 0:q=3
 A.bIi("\u6587\u5b57\u5316\u3051\u304c\u306a\u3044\u304b\u78ba\u8a8d\u4e2d")
 o=new A.aCX(a,A.a([],t.ty))
 for(l=0;l<4;++l){n=B.a3m[l]
-o.aMp(A.Z9("fonts/AppJapanese-"+A.r(n)+".ttf",A.c1L()))}s=6
+o.aMp(A.Z9("fonts/AppJapanese-"+A.r(n)+".woff2",A.c1L()))}s=6
 return A.i(o.mA(),$async$b_3)
 case 6:q=1
 s=5
@@ -73139,7 +73139,7 @@ if(d)B.b.E(o,A.a([B.df,A.bg(m,m,B.q,m,m,B.UJ,m,7,m,m,m,m,m,7),B.df,A.H("\u30a2\u
 o=A.al(o,B.r,m,B.cH,B.h,m)
 if(d)j+="\u3001\u30a2\u30c3\u30d7\u30c7\u30fc\u30c8\u304c\u3042\u308a\u307e\u3059"
 n=new A.Z(B.wG,A.av(m,m,new A.bJ(new A.aLb(b,c),new A.e6(B.UG,o,m),m,d,!0,m,m),!1,m,m,!0,!1,m,m,m,m,m,m,m,m,m,m,j,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m),m)
-return A.a4(A.a([n,A.H("\u203b 146ea36e \xb7 20261030_1949",m,m,m,m,m,A.E(s===B.d?B.S:B.R,m,12,B.n),m,m)],p),B.r,B.f,B.Y,B.m)}}
+return A.a4(A.a([n,A.H("\u203b 89ebf37a \xb7 20261030_1957",m,m,m,m,m,A.E(s===B.d?B.S:B.R,m,12,B.n),m,m)],p),B.r,B.f,B.Y,B.m)}}
 A.aLc.prototype={
 $3(a,b,c){return this.a.a_3(a,this.b,this.c,b===B.ua)},
 $S:384}
