@@ -65,9 +65,9 @@ _flutter.buildConfig = {"engineRevision":"deb287481e3ce9468f3434937ced4240a70539
       }
     } catch (_) {}
   }
-  boot?.stage('アプリを読み込み中');
+  boot?.stage('テスト環境を構築中');
   await Promise.all(['main.dart.js', engine + 'canvaskit.js', engine + 'canvaskit.wasm'].map(prefetch));
-  boot?.stage('表示エンジンを準備中');
+  boot?.stage('画面をスモークテスト中');
   _flutter.loader.load({
     config: { canvasKitBaseUrl: 'canvaskit/', canvasKitVariant: chromium ? 'chromium' : 'full' },
     onEntrypointLoaded: async (engineInitializer) => {
