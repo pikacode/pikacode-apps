@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script>try{if(localStorage.getItem('jstqbWebTestPass')!=='0853306935cb4446ff84bd4240bba7b17aed8e6dba0e8ddbd443db6c38d279d2')location.replace('../')}catch(_){location.replace('../')}</script>
+  <script>try{if(localStorage.getItem('jstqbWebTestPass')!=='c6237172d6b683597cc6762f0267e1158ed27647ff0b8ad1d6a8bbdb71c0fde1')location.replace('../')}catch(_){location.replace('../')}</script>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -41,18 +41,22 @@
   <style>
     html, body { margin: 0; height: 100%; background: #F6F6F6; }
     #boot { position: fixed; inset: 0; z-index: 10; background: #F6F6F6; color: rgba(29, 40, 51, 0.58); transition: opacity .25s ease-out;
-      font: 13px/18px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Roboto, sans-serif; }
+      font: 15px/20px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Roboto, sans-serif; }
     #boot.dark { background: #101215; color: rgba(238, 242, 245, 0.58); }
     #boot.leaving { opacity: 0; pointer-events: none; }
     #boot img { position: absolute; }
     #boot .progress { position: absolute; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; }
-    #boot .track { width: min(240px, calc(100vw - 80px)); height: 6px; border-radius: 3px; overflow: hidden; background: rgba(29, 40, 51, 0.08); }
+    #boot .track { width: min(300px, calc(100vw - 80px)); height: 8px; border-radius: 4px; overflow: hidden; background: rgba(29, 40, 51, 0.08); }
     #boot.dark .track { background: rgba(238, 242, 245, 0.12); }
     /* 三科渐变：CTFL → TM → TA 的科目浅（规则/设计系统.md「三科的值」），整条铺满、用 clip 露出已完成部分，颜色不随进度挤压。 */
-    #boot .fill { height: 100%; width: 100%; clip-path: inset(0 100% 0 0 round 3px); transition: clip-path .2s linear;
+    #boot .fill { height: 100%; width: 100%; clip-path: inset(0 100% 0 0 round 4px); transition: clip-path .2s linear;
       background: linear-gradient(90deg, #33A9DD, #3792AC 50%, #3CAEA8); }
     #boot.dark .fill { background: linear-gradient(90deg, #2AA8E0, #3591AB 50%, #3AAEA7); }
-    #boot .line { margin-top: 12px; display: flex; gap: 8px; font-variant-numeric: tabular-nums; }
+    #boot .line { margin-top: 14px; display: flex; gap: 8px; font-variant-numeric: tabular-nums; }
+    /* 宽屏：条和「学習を始める」同宽 405，随画板缩放（--k 由下面的脚本设）。 */
+    #boot.wide { font-size: calc(17px * var(--k)); line-height: calc(24px * var(--k)); }
+    #boot.wide .track { width: calc(405px * var(--k)); height: calc(10px * var(--k)); border-radius: calc(5px * var(--k)); }
+    #boot.wide .line { margin-top: calc(16px * var(--k)); }
   </style>
 </head>
 <body>
@@ -81,12 +85,14 @@
           // 宽屏：1180×820 画板按 min(1, 宽÷1180, 高÷820) 缩放、竖向居中；图中心在画板 271.5。
           const k = Math.min(1, w / 1180, h / 820);
           iw = 300 * k; ih = 162 * k; cy = (h - 820 * k) / 2 + 271.5 * k;
+          root.style.setProperty('--k', k);
         } else {
           // 窄屏：图 230.33×140，中心在高的 324/874（同 iOS 启动页 centerY × 0.7414）。
           iw = 230.33; ih = 140; cy = h * 324 / 874;
         }
         if (isWide !== wide) {
           wide = isWide;
+          root.classList.toggle('wide', isWide);
           img.src = 'boot/mark' + (isWide ? '-pad' : '') + (dark ? '-dark' : '') + '.png';
         }
         Object.assign(img.style, { width: iw + 'px', height: ih + 'px', left: (w - iw) / 2 + 'px', top: cy - ih / 2 + 'px' });
@@ -98,7 +104,7 @@
       function show() {
         if (!total) return;
         const v = Math.min(99, Math.floor(got * 100 / total));
-        fill.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0 round 3px)';
+        fill.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0 round 4px)';
         pct.textContent = v + '%';
         root.setAttribute('aria-valuenow', String(v));
       }
@@ -110,7 +116,7 @@
         done() {
           removeEventListener('resize', place);
           got = total;
-          fill.style.clipPath = 'inset(0 0 0 0 round 3px)';
+          fill.style.clipPath = 'inset(0 0 0 0 round 4px)';
           if (total) pct.textContent = '100%';
           root.classList.add('leaving');
           setTimeout(() => root.remove(), 300);
