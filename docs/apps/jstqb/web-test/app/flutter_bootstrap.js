@@ -49,10 +49,14 @@ _flutter.buildConfig = {"engineRevision":"deb287481e3ce9468f3434937ced4240a70539
   const blink = navigator.vendor === 'Google Inc.' || navigator.userAgent.includes('Edg/');
   const chromium = blink && typeof ImageDecoder !== 'undefined' && typeof Intl.v8BreakIterator !== 'undefined' && typeof Intl.Segmenter !== 'undefined';
   const engine = chromium ? 'canvaskit/chromium/' : 'canvaskit/';
+  let known = false;
   try {
     const sizes = await (await fetch('boot_sizes.json', { cache: 'no-store' })).json();
     boot?.total(sizes.main + sizes.canvaskit[chromium ? 'chromium' : 'full'] + sizes.fonts + sizes.content);
+    known = boot?.seen(sizes.stamp) ?? false;
   } catch (_) {}
+  // 第一次开或发了新版：真要下载，亮进度条。这一版走完过：不亮；万一浏览器缓存被清了，下得久才亮（缓存里读不会这么久）。
+  const slow = known ? setTimeout(() => boot?.loading(), 800) : (boot?.loading(), null);
   // 边下边报字节；下失败不拦，Flutter 自己再取一次。
   async function prefetch(path) {
     try {
@@ -67,6 +71,7 @@ _flutter.buildConfig = {"engineRevision":"deb287481e3ce9468f3434937ced4240a70539
   }
   boot?.stage('テスト環境を構築中');
   await Promise.all(['main.dart.js', engine + 'canvaskit.js', engine + 'canvaskit.wasm'].map(prefetch));
+  clearTimeout(slow);
   boot?.stage('画面をスモークテスト中');
   _flutter.loader.load({
     config: { canvasKitBaseUrl: 'canvaskit/', canvasKitVariant: chromium ? 'chromium' : 'full' },
