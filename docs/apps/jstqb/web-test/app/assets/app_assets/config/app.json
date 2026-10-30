@@ -1,0 +1,425 @@
+{
+  "schemaVersion": 1,
+  "appID": "jstqb",
+  "brand": {
+    "name": {
+      "latin": "JSTQB",
+      "japanese": "試験対策"
+    },
+    "tagline": "読む・解く・試す",
+    "appStoreID": "6811751328",
+    "playStoreID": "me.pikacode.jstqb.android",
+    "playStoreLive": false,
+    "supportEmail": "support@pikacode.me",
+    "links": {
+      "privacy": "https://pikacode.me/apps/jstqb/privacy/",
+      "terms": "https://pikacode.me/apps/jstqb/terms/",
+      "support": "https://pikacode.me/apps/jstqb/support/"
+    },
+    "termsRevision": 1,
+    "unofficialTitles": [
+      "非公式のアプリです",
+      "問題・解説について",
+      "試験の申込み・最新情報"
+    ],
+    "unofficialMessage": [
+      "本アプリは個人が開発した非公式の学習アプリです。JSTQB・ISTQBおよび関係団体が作成・承認したものではありません。",
+      "問題・解説・シラバス解説は、各シラバスの学習目標をもとに独自に作成したもので、実際の試験問題や公式教材ではありません。",
+      "試験の申込みや最新の情報は、JSTQB公式サイトでご確認ください。"
+    ],
+    "syllabusAbout": {
+      "intro": "JSTQBシラバスの学習目標をもとに、試験に出るところを読みやすく書き下ろした解説です。",
+      "disclaimer": "JSTQB・ISTQBの公式教材ではありません。個人が開発した非公式アプリです。"
+    }
+  },
+  "exams": [
+    "CTFL",
+    "TM",
+    "TA"
+  ],
+  "brandBooks": [
+    "TA",
+    "TM",
+    "CTFL"
+  ],
+  "groups": [
+    {
+      "id": "foundation",
+      "title": "Foundation Level",
+      "dot": {
+        "light": "#1C9AD2",
+        "dark": "#2AA8E0"
+      },
+      "exams": [
+        "CTFL"
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Advanced Level",
+      "dot": {
+        "light": "#3A8D98",
+        "dark": "#3591AB"
+      },
+      "exams": [
+        "TM",
+        "TA"
+      ]
+    }
+  ],
+  "entitlements": [
+    {
+      "id": "ctfl",
+      "exams": [
+        "CTFL"
+      ]
+    },
+    {
+      "id": "tm",
+      "exams": [
+        "TM"
+      ]
+    },
+    {
+      "id": "ta",
+      "exams": [
+        "TA"
+      ]
+    }
+  ],
+  "bundles": [
+    {
+      "id": "ctfl_tm",
+      "name": "基礎レベル＋テストマネジメント",
+      "entitlements": [
+        "ctfl",
+        "tm"
+      ]
+    },
+    {
+      "id": "ctfl_ta",
+      "name": "基礎レベル＋テストアナリスト",
+      "entitlements": [
+        "ctfl",
+        "ta"
+      ]
+    },
+    {
+      "id": "ta_tm",
+      "name": "テストマネジメント＋テストアナリスト",
+      "entitlements": [
+        "tm",
+        "ta"
+      ]
+    },
+    {
+      "id": "ctfl_ta_tm",
+      "name": "全3科目",
+      "entitlements": [
+        "ctfl",
+        "tm",
+        "ta"
+      ],
+      "glow": "start"
+    }
+  ],
+  "accentFallback": {
+    "light": ["#73A3C7", "#6597BE"],
+    "dark": ["#7CB6E0", "#7CB6E0"],
+    "buttonLight": ["#73A3C7", "#6597BE"],
+    "buttonDark": ["#4D7FA2", "#376588"],
+    "ink": { "light": "#2F5F82", "dark": "#B9DDF6" },
+    "solid": { "light": "#5A8FB8", "dark": "#7CB6E0" }
+  },
+  "glows": {
+    "start": {
+      "base": [
+        {
+          "color": "#2DA097",
+          "location": 0
+        },
+        {
+          "color": "#1C8ABB",
+          "location": 0.55
+        },
+        {
+          "color": "#0B88C3",
+          "location": 1
+        }
+      ],
+      "begin": [
+        0.06,
+        -0.75
+      ],
+      "end": [
+        0.94,
+        1.75
+      ],
+      "layers": [
+        {
+          "light": {
+            "color": "#FFFFFF",
+            "opacity": 0.2
+          },
+          "center": [
+            0.3,
+            -0.15
+          ],
+          "radius": [
+            0.5,
+            0.9
+          ],
+          "stop": 0.7
+        },
+        {
+          "light": {
+            "color": "#2EB2EB",
+            "opacity": 0.95
+          },
+          "center": [
+            1,
+            0
+          ],
+          "radius": [
+            0.7,
+            1.6
+          ],
+          "stop": 0.7
+        },
+        {
+          "light": {
+            "color": "#2A8CAC",
+            "opacity": 0.85
+          },
+          "center": [
+            0.44,
+            1.12
+          ],
+          "radius": [
+            0.5,
+            1.4
+          ],
+          "stop": 0.72
+        },
+        {
+          "light": {
+            "color": "#34B4A6",
+            "opacity": 1
+          },
+          "center": [
+            0,
+            0
+          ],
+          "radius": [
+            0.7,
+            1.7
+          ],
+          "stop": 0.62
+        }
+      ],
+      "shadow": {
+        "color": "#0E6E96",
+        "opacity": 0.26,
+        "sameInDark": true
+      }
+    },
+    "ctfl_tm": {
+      "base": [
+        {
+          "color": "#0B88C3",
+          "location": 0
+        },
+        {
+          "color": "#22718A",
+          "location": 1
+        }
+      ],
+      "begin": [
+        0.04,
+        -0.15
+      ],
+      "end": [
+        0.96,
+        1.15
+      ],
+      "layers": [
+        {
+          "light": {
+            "color": "#3C96B2",
+            "opacity": 1
+          },
+          "center": [
+            1,
+            1
+          ],
+          "radius": [
+            0.7,
+            1.6
+          ],
+          "stop": 0.7
+        },
+        {
+          "light": {
+            "color": "#2EB2EB",
+            "opacity": 0.95
+          },
+          "center": [
+            0,
+            0
+          ],
+          "radius": [
+            0.7,
+            1.5
+          ],
+          "stop": 0.7
+        }
+      ],
+      "shadow": {
+        "color": "#0E6E96",
+        "opacity": 0.24,
+        "sameInDark": false
+      }
+    },
+    "ctfl_ta": {
+      "base": [
+        {
+          "color": "#0B88C3",
+          "location": 0
+        },
+        {
+          "color": "#1C8ABB",
+          "location": 0.45
+        },
+        {
+          "color": "#2DA097",
+          "location": 1
+        }
+      ],
+      "begin": [
+        0.04,
+        -0.15
+      ],
+      "end": [
+        0.96,
+        1.15
+      ],
+      "layers": [
+        {
+          "light": {
+            "color": "#38BAAA",
+            "opacity": 1
+          },
+          "center": [
+            1,
+            1
+          ],
+          "radius": [
+            0.7,
+            1.6
+          ],
+          "stop": 0.7
+        },
+        {
+          "light": {
+            "color": "#2EB2EB",
+            "opacity": 0.95
+          },
+          "center": [
+            0,
+            0
+          ],
+          "radius": [
+            0.7,
+            1.5
+          ],
+          "stop": 0.7
+        }
+      ],
+      "shadow": {
+        "color": "#0E6E96",
+        "opacity": 0.24,
+        "sameInDark": false
+      }
+    },
+    "ta_tm": {
+      "base": [
+        {
+          "color": "#22718A",
+          "location": 0
+        },
+        {
+          "color": "#257F92",
+          "location": 0.45
+        },
+        {
+          "color": "#2A9A90",
+          "location": 1
+        }
+      ],
+      "begin": [
+        0.04,
+        -0.15
+      ],
+      "end": [
+        0.96,
+        1.15
+      ],
+      "layers": [
+        {
+          "light": {
+            "color": "#38BAAA",
+            "opacity": 1
+          },
+          "center": [
+            1,
+            1
+          ],
+          "radius": [
+            0.7,
+            1.6
+          ],
+          "stop": 0.7
+        },
+        {
+          "light": {
+            "color": "#3C96B2",
+            "opacity": 1
+          },
+          "center": [
+            0,
+            0
+          ],
+          "radius": [
+            0.7,
+            1.5
+          ],
+          "stop": 0.7
+        }
+      ],
+      "shadow": {
+        "color": "#1D6178",
+        "opacity": 0.24,
+        "sameInDark": false
+      }
+    }
+  },
+  "sync": {
+    "root": "users/{uid}"
+  },
+  "firebase": {
+    "web": {
+      "apiKey": "AIzaSyCHTdyvORhx8Si8qhFUlUfB3sb_ou0fCL0",
+      "appId": "1:23389998110:ios:427448e4b92ea92d71320f",
+      "messagingSenderId": "23389998110",
+      "projectId": "pikacode-jstqb",
+      "authDomain": "pikacode-jstqb.firebaseapp.com",
+      "storageBucket": "pikacode-jstqb.firebasestorage.app"
+    }
+  },
+  "revenueCat": {
+    "apiKeys": {
+      "ios": "appl_OgHzgzVEzZtFjuxeCkMIxFlNCUY",
+      "android": "goog_ssWTUTInPLFktuttnHEJPwZhvEd"
+    }
+  }
+}
