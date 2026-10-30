@@ -30,15 +30,19 @@
       btn.href = url;
       btn.textContent = name ? '打开设计串：' + name : '打开设计串';
       btn.hidden = false;
-      // 桌面端接手后浏览器会失去焦点：这时关掉这个标签页。
+      // 失去焦点时不能马上关：Chrome 先弹「要打开 Claude 吗？」时页面也会失去焦点，
+      // 这时关掉标签页会把那个确认框一起关掉，桌面端就打不开（10-29 串链接「弹一下就没了」）。
+      // 改成：标签页被切到后台时关；或者失去焦点后又回到这一页（确认框点完、或从桌面端切回浏览器）时关。
       // 这个标签页是画布用新标签打开的、只有一条历史，浏览器允许脚本关闭；关不掉时按钮留着备用。
       var done = false;
+      var blurred = false;
       function closeSoon() {
         if (done) return;
         done = true;
-        setTimeout(function () { window.close(); }, 300);
+        setTimeout(function () { window.close(); }, 1000);
       }
-      window.addEventListener('blur', closeSoon);
+      window.addEventListener('blur', function () { blurred = true; });
+      window.addEventListener('focus', function () { if (blurred) closeSoon(); });
       document.addEventListener('visibilitychange', function () { if (document.hidden) closeSoon(); });
       location.href = url;
     })();
