@@ -72,7 +72,7 @@ _flutter.buildConfig = {"engineRevision":"deb287481e3ce9468f3434937ced4240a70539
     config: { canvasKitBaseUrl: 'canvaskit/', canvasKitVariant: chromium ? 'chromium' : 'full' },
     onEntrypointLoaded: async (engineInitializer) => {
       const appRunner = await engineInitializer.initializeEngine();
-      // 之后由 Dart（main.dart）接着报，画出第一帧后收起。
+      // 之后由 Dart（main.dart）接着报，launch_gate.dart 在第一帧后收起。
       await appRunner.runApp();
     },
   });
