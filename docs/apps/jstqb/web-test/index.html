@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- JSTQB 网页测试版入口：核对口令（和 build.json 里的 SHA-256 比），对了记在本机，转到 app/。
+<!-- JSTQB 网页测试版入口：核对口令（按 build.json 里的盐算 PBKDF2 后比），对了记在本机，转到 app/。
      App 文件不加密、按需下载，启动进度条按真实字节走（pika 10-30 选 a）；口令只是轻量门槛。 -->
 <html lang="zh">
 <head>
@@ -29,9 +29,12 @@
     const msg = document.getElementById('msg');
     let info = null;
 
+    // 和 tool/web_test_publish.mjs 同一种算法：PBKDF2-SHA256，盐和次数在 build.json 里（故意慢，同安卓测试包）。
     async function hash(password) {
-      const data = new TextEncoder().encode('jstqb-web-test:' + password);
-      return [...new Uint8Array(await crypto.subtle.digest('SHA-256', data))].map((b) => b.toString(16).padStart(2, '0')).join('');
+      const s = crypto.subtle;
+      const key = await s.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+      const bits = await s.deriveBits({ name: 'PBKDF2', salt: new TextEncoder().encode(info.salt), iterations: info.iterations, hash: 'SHA-256' }, key, 256);
+      return [...new Uint8Array(bits)].map((b) => b.toString(16).padStart(2, '0')).join('');
     }
 
     // 以前的测试版用 service worker 从解密后的缓存给 App，留着会继续给旧版：注销并清掉。
@@ -58,7 +61,7 @@
       try {
         // 以前记下的口令（旧入口页存的）对得上就直接换成新记号，不用再输一次。
         const old = localStorage.getItem('jstqbWebTestPw');
-        if (old && info?.pass && (await hash(old)) === info.pass) localStorage.setItem(KEY, info.pass);
+        if (old && info?.salt && (await hash(old)) === info.pass) localStorage.setItem(KEY, info.pass);
         localStorage.removeItem('jstqbWebTestPw');
         localStorage.removeItem('jstqbWebTestBuild');
       } catch (_) {}
@@ -67,7 +70,8 @@
 
     document.getElementById('f').addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!info?.pass) { msg.textContent = '新版还在发布，请稍后刷新'; return; }
+      if (!info?.salt) { msg.textContent = '新版还在发布，请稍后刷新'; return; }
+      msg.textContent = '核对中…';
       if (await hash(document.getElementById('pw').value) !== info.pass) { msg.textContent = '密码不对'; return; }
       localStorage.setItem(KEY, info.pass);
       open();
