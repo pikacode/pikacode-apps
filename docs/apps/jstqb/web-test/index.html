@@ -1,5 +1,6 @@
 <!doctype html>
-<!-- JSTQB 网页测试版入口：输口令后在浏览器里解密 app.bin，写进缓存，由 sw.js 在本目录的 app/ 下提供（只是轻量门槛，不是强保护） -->
+<!-- JSTQB 网页测试版入口：核对口令（和 build.json 里的 SHA-256 比），对了记在本机，转到 app/。
+     App 文件不加密、按需下载，启动进度条按真实字节走（pika 10-30 选 a）；口令只是轻量门槛。 -->
 <html lang="zh">
 <head>
   <meta charset="utf-8">
@@ -7,24 +8,8 @@
   <meta name="robots" content="noindex, nofollow">
   <title>网页测试版</title>
   <link rel="stylesheet" href="/assets/site.css">
-  <style>
-    /* 下载新版时盖住整页的进度条，样式同 App 的启动进度条（JSTQB-ios flutter/web/index.html）。 */
-    #boot { position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center;
-      background: #F6F6F6; color: rgba(29, 40, 51, 0.58); font: 13px/18px -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Roboto, sans-serif; }
-    #boot.on { display: flex; }
-    #boot .track { width: min(240px, calc(100vw - 80px)); height: 6px; border-radius: 3px; overflow: hidden; background: rgba(29, 40, 51, 0.08); }
-    #boot .fill { height: 100%; width: 100%; clip-path: inset(0 100% 0 0 round 3px); transition: clip-path .2s linear;
-      background: linear-gradient(90deg, #33A9DD, #3792AC 50%, #3CAEA8); }
-    #boot .line { margin-top: 12px; display: flex; gap: 8px; font-variant-numeric: tabular-nums; }
-    @media (prefers-color-scheme: dark) {
-      #boot { background: #101215; color: rgba(238, 242, 245, 0.58); }
-      #boot .track { background: rgba(238, 242, 245, 0.12); }
-      #boot .fill { background: linear-gradient(90deg, #2AA8E0, #3591AB 50%, #3AAEA7); }
-    }
-  </style>
 </head>
 <body>
-  <div id="boot"><div class="track"><div class="fill"></div></div><div class="line"><span class="label"></span><span class="pct"></span></div></div>
   <main>
     <header>
       <h1>网页测试版</h1>
@@ -39,139 +24,53 @@
     </section>
   </main>
   <script>
-    const APP = new URL('app/', location.href).pathname;
-    const CACHE = 'jstqb-web-test';
-    const KEY = 'jstqbWebTestBuild';
-    // 输对过的口令记在本机：合进 dev 就自动发新版，每次都让人重输太烦；新版直接用它下载解密（只是轻量门槛）。
-    const PW = 'jstqbWebTestPw';
+    // 和 tool/web_test_publish.mjs 同一个记号：app/index.html 开头拿它比，不对就转回这里。
+    const KEY = 'jstqbWebTestPass';
     const msg = document.getElementById('msg');
-    const buildLine = document.getElementById('build');
-    let build = null;
-    const boot = document.getElementById('boot');
-    // 盖上进度条；value 为 null 时只换文字（不知道总大小）。
-    function progress(label, value) {
-      boot.classList.add('on');
-      boot.querySelector('.label').textContent = label;
-      if (value == null) return;
-      boot.querySelector('.fill').style.clipPath = 'inset(0 ' + (100 - value) + '% 0 0 round 3px)';
-      boot.querySelector('.pct').textContent = Math.floor(value) + '%';
+    let info = null;
+
+    async function hash(password) {
+      const data = new TextEncoder().encode('jstqb-web-test:' + password);
+      return [...new Uint8Array(await crypto.subtle.digest('SHA-256', data))].map((b) => b.toString(16).padStart(2, '0')).join('');
     }
 
-    async function current() {
-      const res = await fetch('build.json', { cache: 'no-store' });
-      return (await res.json()).build;
-    }
-
-    async function ready() {
+    // 以前的测试版用 service worker 从解密后的缓存给 App，留着会继续给旧版：注销并清掉。
+    async function dropOldCache() {
       try {
-        if (localStorage.getItem(KEY) !== build) return false;
-        const c = await caches.open(CACHE);
-        const mark = await c.match(APP + '__build');
-        // 和 sw.js 看同一个记号，两边判断一致，不会来回跳。
-        return !!(await c.match(APP + 'index.html')) && !!mark && (await mark.text()) === build;
-      } catch (_) {
-        return false;
-      }
+        for (const reg of await navigator.serviceWorker?.getRegistrations() ?? []) await reg.unregister();
+        await caches.delete('jstqb-web-test');
+      } catch (_) {}
     }
 
-    async function download() {
-      const res = await fetch('app.bin', { cache: 'no-store' });
-      if (!res.ok) throw new Error('下载失败（' + res.status + '）');
-      const total = Number(res.headers.get('content-length')) || 0;
-      const reader = res.body.getReader();
-      const parts = [];
-      let got = 0;
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        parts.push(value);
-        got += value.length;
-        progress('テスト版をダウンロード中', total ? Math.min(90, got * 90 / total) : null);
-      }
-      const data = new Uint8Array(got);
-      let off = 0;
-      for (const p of parts) { data.set(p, off); off += p.length; }
-      return data;
-    }
-
-    async function install(buf, password) {
-      progress('テスト版を展開中', 92);
-      const s = crypto.subtle;
-      const base = await s.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
-      const key = await s.deriveKey({ name: 'PBKDF2', salt: buf.slice(0, 16), iterations: 600000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
-      let zipped;
-      try {
-        zipped = await s.decrypt({ name: 'AES-GCM', iv: buf.slice(16, 28) }, key, buf.subarray(28));
-      } catch (_) {
-        boot.classList.remove('on');
-        return false;
-      }
-      const plain = new Uint8Array(await new Response(new Blob([zipped]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
-      const headLength = new DataView(plain.buffer).getUint32(0);
-      const head = JSON.parse(new TextDecoder().decode(plain.subarray(4, 4 + headLength)));
-      const start = 4 + headLength;
-      await caches.delete(CACHE);
-      const c = await caches.open(CACHE);
-      for (const [path, offset, length, type] of head.files) {
-        const body = plain.slice(start + offset, start + offset + length);
-        await c.put(APP + path, new Response(body, { headers: { 'Content-Type': type } }));
-      }
-      // 给 sw.js 看的版本记号：直接打开 app/ 时它拿这个和线上 build.json 比，旧了转回入口页。
-      await c.put(APP + '__build', new Response(head.build));
-      localStorage.setItem(KEY, head.build);
-      return true;
-    }
-
-    async function open() {
-      if (boot.classList.contains('on')) progress('起動中', 100);
-      else msg.textContent = '启动中…';
-      // 不能等 serviceWorker.ready：它只等管着当前页（入口页）的那个，sw.js 只管 app/，会一直等下去。
-      const reg = await navigator.serviceWorker.register('sw.js', { scope: APP });
-      // 等新 sw.js 生效：状态可能在挂监听前就变了，所以轮询查，最多等 5 秒，到时间照样进（旧的那个也能用缓存）。
-      for (let i = 0; i < 50 && !(reg.active && reg.active.state === 'activated' && !reg.installing && !reg.waiting); i++) {
-        await new Promise((done) => setTimeout(done, 100));
-      }
+    function open() {
       // 用 replace：入口页不留在浏览历史里，App 里侧滑返回不会退回密码页。
-      location.replace(APP);
+      location.replace('app/');
     }
 
     (async () => {
+      await dropOldCache();
       try {
-        build = await current();
-        buildLine.textContent = '构建时间 ' + build;
+        info = await (await fetch('build.json', { cache: 'no-store' })).json();
+        document.getElementById('build').textContent = '构建时间 ' + info.build;
       } catch (_) {
-        buildLine.textContent = '读不到构建时间';
+        document.getElementById('build').textContent = '读不到构建时间';
       }
-      // 本机已有这一版就直接进 App；有新版且记着口令就自动更新后进，不再停在密码页。
-      if (!build || !('serviceWorker' in navigator)) return;
-      if (await ready()) return open();
-      const saved = localStorage.getItem(PW);
-      if (!saved) return;
       try {
-        if (await install(await download(), saved)) return open();
-        localStorage.removeItem(PW);
-        msg.textContent = '';
-      } catch (err) {
-        boot.classList.remove('on');
-        msg.textContent = err.message;
-      }
+        // 以前记下的口令（旧入口页存的）对得上就直接换成新记号，不用再输一次。
+        const old = localStorage.getItem('jstqbWebTestPw');
+        if (old && info?.pass && (await hash(old)) === info.pass) localStorage.setItem(KEY, info.pass);
+        localStorage.removeItem('jstqbWebTestPw');
+        localStorage.removeItem('jstqbWebTestBuild');
+      } catch (_) {}
+      if (info?.pass && localStorage.getItem(KEY) === info.pass) open();
     })();
 
     document.getElementById('f').addEventListener('submit', async (e) => {
       e.preventDefault();
-      try {
-        if (!('serviceWorker' in navigator)) throw new Error('这个浏览器不支持（无痕模式可能关了 service worker）');
-        if (!(build && await ready())) {
-          const password = document.getElementById('pw').value;
-          const ok = await install(await download(), password);
-          if (!ok) { msg.textContent = '密码不对'; return; }
-          localStorage.setItem(PW, password);
-        }
-        await open();
-      } catch (err) {
-        boot.classList.remove('on');
-        msg.textContent = err.message;
-      }
+      if (!info?.pass) { msg.textContent = '新版还在发布，请稍后刷新'; return; }
+      if (await hash(document.getElementById('pw').value) !== info.pass) { msg.textContent = '密码不对'; return; }
+      localStorage.setItem(KEY, info.pass);
+      open();
     });
   </script>
 </body>
