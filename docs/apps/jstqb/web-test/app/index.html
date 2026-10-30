@@ -106,7 +106,7 @@
           img.src = 'boot/mark' + (isWide ? '-pad' : '') + (dark ? '-dark' : '') + '.png';
         }
         Object.assign(img.style, { width: iw + 'px', height: ih + 'px', left: (w - iw) / 2 + 'px', top: cy - ih / 2 + 'px' });
-        progress.style.top = cy + ih / 2 + 40 + 'px';
+        progress.style.top = cy + ih / 2 + 16 * (isWide ? Math.min(1, w / 1180, h / 820) : 1) + 'px';
       }
       place();
       addEventListener('resize', place);
