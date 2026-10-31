@@ -7,7 +7,7 @@
   "purchaseSubtitle": "Test Analyst",
   "certificationName": "Certified Tester Advanced Level Test Analyst",
   "isFree": false,
-  "syllabusVersionNote": "JSTQB CTAL-TA v4.0 シラバス対応（最新版）",
+  "syllabusVersionNote": "JSTQB CTAL-TA v4.0 シラバス対応",
   "color": {
     "light": ["#3CAEA8", "#398E8A"],
     "dark": ["#3AAEA7", "#288C86"],

@@ -7,7 +7,7 @@
   "purchaseSubtitle": "Certified Tester",
   "certificationName": "Certified Tester Foundation Level",
   "isFree": false,
-  "syllabusVersionNote": "JSTQB CTFL v4.0 シラバス対応（最新版）",
+  "syllabusVersionNote": "JSTQB CTFL v4.0 シラバス対応",
   "color": {
     "light": ["#33A9DD", "#1690C9"],
     "dark": ["#2AA8E0", "#0A8AC2"],
