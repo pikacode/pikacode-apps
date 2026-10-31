@@ -30,20 +30,37 @@
       btn.href = url;
       btn.textContent = name ? '打开设计串：' + name : '打开设计串';
       btn.hidden = false;
-      // 失去焦点时不能马上关：Chrome 先弹「要打开 Claude 吗？」时页面也会失去焦点，
-      // 这时关掉标签页会把那个确认框一起关掉，桌面端就打不开（10-29 串链接「弹一下就没了」）。
-      // 改成：标签页被切到后台时关；或者失去焦点后又回到这一页（确认框点完、或从桌面端切回浏览器）时关。
+      // 什么时候关这个标签页，分两种情况：
+      // 1) Chrome 先弹「要打开 Claude 吗？」：弹窗出来时页面失去焦点，点完弹窗焦点回来，再关。
+      //    失去焦点时不能马上关，否则会把确认框一起关掉（10-29「弹一下就没了」）。
+      // 2) 勾过「始终允许」、不弹窗：直接切到桌面端，焦点不会回来，原来要等用户切回浏览器才关（10-31「返回才关」）。
+      //    所以记住这台浏览器是哪种：失去焦点 15 秒以上才回来，说明没弹窗、是桌面端接手了，以后失去焦点就直接关。
+      //    点完弹窗回来（15 秒内）说明还会弹窗，就不记，下次照第 1 种。
       // 这个标签页是画布用新标签打开的、只有一条历史，浏览器允许脚本关闭；关不掉时按钮留着备用。
+      var KEY = 'go-claude-no-dialog';
+      var noDialog = false;
+      try { noDialog = localStorage.getItem(KEY) === '1'; } catch (e) {}
       var done = false;
-      var blurred = false;
-      function closeSoon() {
+      var blurredAt = 0;
+      function closeSoon(delay) {
         if (done) return;
         done = true;
-        setTimeout(function () { window.close(); }, 1000);
+        setTimeout(function () { window.close(); }, delay);
       }
-      window.addEventListener('blur', function () { blurred = true; });
-      window.addEventListener('focus', function () { if (blurred) closeSoon(); });
-      document.addEventListener('visibilitychange', function () { if (document.hidden) closeSoon(); });
+      window.addEventListener('blur', function () {
+        blurredAt = Date.now();
+        if (noDialog) closeSoon(800);
+      });
+      window.addEventListener('focus', function () {
+        if (!blurredAt) return;
+        var away = Date.now() - blurredAt;
+        try {
+          if (away > 15000) localStorage.setItem(KEY, '1');
+          else localStorage.removeItem(KEY);
+        } catch (e) {}
+        closeSoon(1000);
+      });
+      document.addEventListener('visibilitychange', function () { if (document.hidden) closeSoon(1000); });
       location.href = url;
     })();
   </script>
