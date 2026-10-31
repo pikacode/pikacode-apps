@@ -3,8 +3,12 @@
 // 不会卡在旧版：每次打开页面（导航）都从网上取 index.html 和 boot_sizes.json（构建时写的版本记号 stamp），
 // 记号变了就清掉旧版文件再取新的；取不到记号（开发时、离线）不存也不用缓存，全部照常走网络。
 // index.html、boot_sizes.json、flutter_bootstrap.js、sw.js 自己从不缓存。
+// Google 上的两样启动要死等的外部文件（Firebase 脚本、引擎的 Roboto）也存一份，另放一个不随版本清的缓存：
+// 它们的地址带版本号、内容不会变；不存的话刷新时 Google 一慢，加载页就停多久（pika 10-31「刷新在 logo 页停了 10 来秒」，
+// 本地把 www.gstatic.com 或 fonts.gstatic.com 拖慢 6 秒，刷新就多等 6 秒）。
 
 const prefix = 'jstqb-app-';
+const externalCache = 'jstqb-ext-1';
 const neverCache = ['boot_sizes.json', 'flutter_bootstrap.js', 'sw.js', 'index.html'];
 let stamp = null;
 
@@ -44,8 +48,27 @@ function cacheable(request) {
 // 每次刷新都要走一趟网络，缓存里还越积越多。它每版构建只有一份，按路径比对就行。
 const ignoreQuery = ['version.json'];
 
+/** 地址里带版本、内容不变的外部文件：Firebase 脚本（firebasejs/<版本>/）、Google 字体（地址带 v32 这样的版本）。 */
+function external(request) {
+  if (request.method !== 'GET') return false;
+  const url = request.url;
+  return url.startsWith('https://www.gstatic.com/firebasejs/') || url.startsWith('https://fonts.gstatic.com/s/');
+}
+
 self.addEventListener('fetch', (event) => {
   const request = event.request;
+  if (external(request)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(externalCache);
+      const hit = await cache.match(request);
+      if (hit) return hit;
+      const res = await fetch(request);
+      // 只存取全了的（cors 200）；不透明的响应看不到状态，不存。
+      if (res.ok && res.type === 'cors') cache.put(request, res.clone()).catch(() => {});
+      return res;
+    })());
+    return;
+  }
   if (request.mode === 'navigate') {
     // 先确定版本记号再给页面：页面接着要的文件都按新记号判断，不会混进旧版。
     event.respondWith((async () => {
