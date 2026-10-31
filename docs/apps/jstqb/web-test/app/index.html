@@ -35,6 +35,13 @@
   <title>JSTQB対策</title>
   <meta name="theme-color" content="#FFFFFF">
   <link rel="manifest" href="manifest.json">
+  <!-- 启动要等的外部文件一开页就并行下载（pika 10-31「刷新后白了10几秒」）：Flutter 引擎画第一帧前要的 Roboto，
+       firebase_core_web 一个接一个 import() 的 Firebase 脚本（版本同 firebase_core_web 的 supportedFirebaseJsSdkVersion，
+       test/design/web_boot_preload_test.dart 核对）。以前要等程序跑起来才开始下，而且 Firebase 三个是排队下的。 -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js">
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js">
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore-pipelines.js">
   <!-- mixpanel_flutter 网页版要先载入它自带的 JS（JST-197） -->
   <script src="./assets/packages/mixpanel_flutter/assets/mixpanel.js"></script>
   <!-- 启动加载页（pika 10-30）：和 App 系统启动页一样的书组 + App 名（不带「読む・解く・試す」），下面一条三科渐变的进度条和变化的文字、百分比。
@@ -116,7 +123,11 @@
       try { seenStamp = localStorage.getItem(stampKey); } catch (_) {}
       const isReload = performance.getEntriesByType('navigation')[0]?.type === 'reload';
       // 刷新且走完过一次：大概率同一版，先不画书组；flutter_bootstrap.js 查到版本变了再画回来。
-      if (isReload && seenStamp) root.classList.add('quiet');
+      // 0.5 秒还没出来（网慢、等 Firebase 等外部脚本）就把书组画回来，不留一整屏空白（pika 10-31「刷新后白了10几秒」）。
+      if (isReload && seenStamp) {
+        root.classList.add('quiet');
+        setTimeout(() => root.classList.remove('quiet'), 500);
+      }
       function show() {
         if (!total) return;
         const v = Math.min(99, Math.floor(got * 100 / total));
@@ -146,6 +157,11 @@
           closing = true;
           removeEventListener('resize', place);
           got = total;
+          // 启动各步到这里的毫秒数打一行（Dart 的 BootProgress.mark、下面 flutter_bootstrap.js 的点），查刷新慢卡在哪一步。
+          try {
+            const marks = performance.getEntriesByType('mark').filter((m) => m.name.startsWith('jstqb:'));
+            console.info('[启动耗时 ms]', marks.map((m) => m.name.slice(6) + ' ' + Math.round(m.startTime)).join(', ') + ', 出页面 ' + Math.round(performance.now()));
+          } catch (_) {}
           try { if (stamp) localStorage.setItem(stampKey, stamp); } catch (_) {}
           fill.style.clipPath = 'inset(0 0 0 0 round 4px)';
           if (total) pct.textContent = '100%';

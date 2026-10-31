@@ -72,11 +72,13 @@ _flutter.buildConfig = {"engineRevision":"deb287481e3ce9468f3434937ced4240a70539
   boot?.stage('テスト環境を構築中');
   await Promise.all(['main.dart.js', engine + 'canvaskit.js', engine + 'canvaskit.wasm'].map(prefetch));
   clearTimeout(slow);
+  performance.mark('jstqb:下完程序和引擎');
   boot?.stage('画面をスモークテスト中');
   _flutter.loader.load({
     config: { canvasKitBaseUrl: 'canvaskit/', canvasKitVariant: chromium ? 'chromium' : 'full' },
     onEntrypointLoaded: async (engineInitializer) => {
       const appRunner = await engineInitializer.initializeEngine();
+      performance.mark('jstqb:引擎就绪');
       // 之后由 Dart（main.dart）接着报，launch_gate.dart 在第一帧后收起。
       await appRunner.runApp();
     },
