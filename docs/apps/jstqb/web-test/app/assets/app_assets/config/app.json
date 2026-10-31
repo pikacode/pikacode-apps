@@ -119,8 +119,7 @@
         "ctfl",
         "tm",
         "ta"
-      ],
-      "glow": "start"
+      ]
     }
   ],
   "accentFallback": {
@@ -226,54 +225,23 @@
     "ctfl_tm": {
       "base": [
         {
-          "color": "#0B88C3",
+          "color": "#33A9DD",
           "location": 0
         },
         {
-          "color": "#22718A",
+          "color": "#36778D",
           "location": 1
         }
       ],
       "begin": [
-        0.04,
-        -0.15
+        0.3,
+        -0.4
       ],
       "end": [
-        0.96,
-        1.15
+        0.7,
+        1.4
       ],
-      "layers": [
-        {
-          "light": {
-            "color": "#3C96B2",
-            "opacity": 1
-          },
-          "center": [
-            1,
-            1
-          ],
-          "radius": [
-            0.7,
-            1.6
-          ],
-          "stop": 0.7
-        },
-        {
-          "light": {
-            "color": "#2EB2EB",
-            "opacity": 0.95
-          },
-          "center": [
-            0,
-            0
-          ],
-          "radius": [
-            0.7,
-            1.5
-          ],
-          "stop": 0.7
-        }
-      ],
+      "layers": [],
       "shadow": {
         "color": "#0E6E96",
         "opacity": 0.24,
@@ -283,58 +251,23 @@
     "ctfl_ta": {
       "base": [
         {
-          "color": "#0B88C3",
+          "color": "#33A9DD",
           "location": 0
         },
         {
-          "color": "#1C8ABB",
-          "location": 0.45
-        },
-        {
-          "color": "#2DA097",
+          "color": "#398E8A",
           "location": 1
         }
       ],
       "begin": [
-        0.04,
-        -0.15
+        0.3,
+        -0.4
       ],
       "end": [
-        0.96,
-        1.15
+        0.7,
+        1.4
       ],
-      "layers": [
-        {
-          "light": {
-            "color": "#38BAAA",
-            "opacity": 1
-          },
-          "center": [
-            1,
-            1
-          ],
-          "radius": [
-            0.7,
-            1.6
-          ],
-          "stop": 0.7
-        },
-        {
-          "light": {
-            "color": "#2EB2EB",
-            "opacity": 0.95
-          },
-          "center": [
-            0,
-            0
-          ],
-          "radius": [
-            0.7,
-            1.5
-          ],
-          "stop": 0.7
-        }
-      ],
+      "layers": [],
       "shadow": {
         "color": "#0E6E96",
         "opacity": 0.24,
@@ -344,58 +277,53 @@
     "ta_tm": {
       "base": [
         {
-          "color": "#22718A",
+          "color": "#3792AC",
           "location": 0
         },
         {
-          "color": "#257F92",
-          "location": 0.45
-        },
-        {
-          "color": "#2A9A90",
+          "color": "#398E8A",
           "location": 1
         }
       ],
       "begin": [
-        0.04,
-        -0.15
+        0.3,
+        -0.4
       ],
       "end": [
-        0.96,
-        1.15
+        0.7,
+        1.4
       ],
-      "layers": [
+      "layers": [],
+      "shadow": {
+        "color": "#1D6178",
+        "opacity": 0.24,
+        "sameInDark": false
+      }
+    },
+    "ctfl_ta_tm": {
+      "base": [
         {
-          "light": {
-            "color": "#38BAAA",
-            "opacity": 1
-          },
-          "center": [
-            1,
-            1
-          ],
-          "radius": [
-            0.7,
-            1.6
-          ],
-          "stop": 0.7
+          "color": "#33A9DD",
+          "location": 0
         },
         {
-          "light": {
-            "color": "#3C96B2",
-            "opacity": 1
-          },
-          "center": [
-            0,
-            0
-          ],
-          "radius": [
-            0.7,
-            1.5
-          ],
-          "stop": 0.7
+          "color": "#37859D",
+          "location": 0.5
+        },
+        {
+          "color": "#398E8A",
+          "location": 1
         }
       ],
+      "begin": [
+        0.3,
+        -0.4
+      ],
+      "end": [
+        0.7,
+        1.4
+      ],
+      "layers": [],
       "shadow": {
         "color": "#1D6178",
         "opacity": 0.24,
@@ -416,6 +344,7 @@
       "storageBucket": "pikacode-jstqb.firebasestorage.app"
     }
   },
+  "questionApi": "https://jstqb-questions.pikacode.workers.dev",
   "revenueCat": {
     "apiKeys": {
       "ios": "appl_OgHzgzVEzZtFjuxeCkMIxFlNCUY",

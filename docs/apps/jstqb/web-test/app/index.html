@@ -38,7 +38,7 @@
   <!-- mixpanel_flutter 网页版要先载入它自带的 JS（JST-197） -->
   <script src="./assets/packages/mixpanel_flutter/assets/mixpanel.js"></script>
   <!-- 启动加载页（pika 10-30）：和 App 系统启动页一样的书组 + App 名（不带「読む・解く・試す」），下面一条三科渐变的进度条和变化的文字、百分比。
-       百分比是真实下载的字节数 ÷ 全部要下的（boot_sizes.json）：程序、引擎由 flutter_bootstrap.js 报，字体、シラバス、問題由 Dart 报
+       百分比是真实下载的字节数 ÷ 全部要下的（boot_sizes.json）：程序、引擎由 flutter_bootstrap.js 报，字体、シラバス由 Dart 报（题目正文不在网页包里，JST-243）
        （lib/data/platform/boot_progress*.dart），开始页或启动页第一帧画出后收起进度条，书组留在原位。 -->
   <style>
     html, body { margin: 0; height: 100%; background: #F6F6F6; }
