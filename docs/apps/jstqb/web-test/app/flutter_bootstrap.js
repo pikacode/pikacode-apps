@@ -45,6 +45,8 @@ _flutter.buildConfig = {"engineRevision":"deb287481e3ce9468f3434937ced4240a70539
 
 (async () => {
   const boot = window.jstqbBoot;
+  // 离线缓存（web/sw.js）：本版文件存在浏览器里，刷新不再逐个问服务器（pika 10-31）。第一次打开时装上，下次刷新起生效。
+  try { navigator.serviceWorker?.register('sw.js').catch(() => {}); } catch (_) {}
   // 同 Flutter 的判断（flutter.js：hasImageCodecs && hasChromiumBreakIterators）：Chrome、Edge 用 chromium 版引擎，其余用 full 版。
   const blink = navigator.vendor === 'Google Inc.' || navigator.userAgent.includes('Edg/');
   const chromium = blink && typeof ImageDecoder !== 'undefined' && typeof Intl.v8BreakIterator !== 'undefined' && typeof Intl.Segmenter !== 'undefined';
