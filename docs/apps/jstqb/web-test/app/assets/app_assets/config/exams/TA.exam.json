@@ -21,9 +21,9 @@
     "syllabus": "Syllabus/TA-Custom/Version2.0"
   },
   "mockExam": {
-    "questionCount": 40,
+    "questionCount": 45,
     "durationMinutes": 120,
-    "passingCount": 26,
+    "passingCount": 30,
     "passRate": { "label": "2025年度", "percent": 38.61 },
     "preparationDays": 105,
     "chapterQuestionCounts": { "1": 8, "2": 3, "3": 22, "4": 4, "5": 8 }
