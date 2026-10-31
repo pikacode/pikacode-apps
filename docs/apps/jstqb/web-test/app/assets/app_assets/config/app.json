@@ -339,6 +339,13 @@
     "root": "users/{uid}"
   },
   "firebase": {
+    "android": {
+      "apiKey": "AIzaSyDBR8Edsi1tVEkQZeHY1Hmf7OYQ1N0_ZHU",
+      "appId": "1:23389998110:android:22c7d6c20a62032071320f",
+      "messagingSenderId": "23389998110",
+      "projectId": "pikacode-jstqb",
+      "storageBucket": "pikacode-jstqb.firebasestorage.app"
+    },
     "web": {
       "apiKey": "AIzaSyCHTdyvORhx8Si8qhFUlUfB3sb_ou0fCL0",
       "appId": "1:23389998110:ios:427448e4b92ea92d71320f",
