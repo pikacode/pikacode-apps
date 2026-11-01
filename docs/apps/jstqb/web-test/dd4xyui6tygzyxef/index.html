@@ -65,7 +65,7 @@
     #boot.quiet img { visibility: hidden; }
     #boot .track { width: min(300px, calc(100vw - 80px)); height: 8px; border-radius: 4px; overflow: hidden; background: rgba(29, 40, 51, 0.08); }
     #boot.dark .track { background: rgba(238, 242, 245, 0.12); }
-    /* 三科渐变：CTFL → TM → TA 的科目浅（文档/规则/设计系统.md「三科的值」），整条铺满、用 clip 露出已完成部分，颜色不随进度挤压。 */
+    /* 三科渐变：CTFL → TM → TA 的科目浅（设计系统「名字与用法」的「三科的值」），整条铺满、用 clip 露出已完成部分，颜色不随进度挤压。 */
     #boot .fill { height: 100%; width: 100%; clip-path: inset(0 100% 0 0 round 4px); transition: clip-path .2s linear;
       background: linear-gradient(90deg, #33A9DD, #3792AC 50%, #3CAEA8); }
     #boot.dark .fill { background: linear-gradient(90deg, #2AA8E0, #3591AB 50%, #3AAEA7); }
