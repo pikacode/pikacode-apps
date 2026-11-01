@@ -73524,17 +73524,19 @@ r=(a.B(p).f.c&&s>=874?B.K:B.cl)===B.K
 p=r}else p=!0
 q.ch=p
 return A.aaz(!1,new A.hk(new A.b9r(q,o),null,new A.j5(A.a([q.gdJ(),q.x,q.z],t.bA)),null),null,t.z)},
-axf(a,b){var s,r,q=this,p=null,o=a.B(t.M).f,n=q.gdJ(),m=n.gvo(),l=t.p,k=A.a([new A.hI(B.dN,"\u623b\u308b",new A.b9f(q),!1,!1,p),new A.qF(q.z,q.ga38(),!1,p)],l),j=A.a([],l),i=m==null,h=i?p:m.goj()
-if(h===!0){h=q.x.a
-s=h?"\u30e1\u30e2\u3092\u9589\u3058\u308b":"\u30e1\u30e2"
-if(h)r=B.o
-else r=o.e.b===B.e?B.l:B.k
-j.push(new A.hI(new A.RB(r,p),s,new A.b9g(q),h,!1,p))}j.push(new A.a4R(n.gTz(),q.gaxe(),p))
-n=A.a([A.zW(q.a14(),new A.b9h(q,m,o,a,b),118,1,0.3,new A.DN("\u6a21\u64ec\u8a66\u9a13",k,j,p),p)],l)
-l=i?p:m.goj()
-if(l===!0)n.push(new A.G0(q.x,m.a,"exam_question",B.RH))
-n.push(A.bMW(q,b))
-return new A.am(B.D,p,B.B,B.w,n,p)},
+axf(a,b){var s,r,q,p,o=this,n=null,m=a.B(t.M).f,l=o.gdJ(),k=l.gvo(),j=t.p,i=A.a([new A.hI(B.dN,"\u623b\u308b",new A.b9f(o),!1,!1,n),new A.qF(o.z,o.ga38(),!1,n)],j)
+l=A.a([new A.a4R(l.gTz(),o.gaxe(),n)],j)
+s=k==null
+r=s?n:k.goj()
+if(r===!0){r=o.x.a
+q=r?"\u30e1\u30e2\u3092\u9589\u3058\u308b":"\u30e1\u30e2"
+if(r)p=B.o
+else p=m.e.b===B.e?B.l:B.k
+l.push(new A.hI(new A.RB(p,n),q,new A.b9g(o),r,!1,n))}l=A.a([A.zW(o.a14(),new A.b9h(o,k,m,a,b),118,1,0.3,new A.DN("\u6a21\u64ec\u8a66\u9a13",i,l,n),n)],j)
+j=s?n:k.goj()
+if(j===!0)l.push(new A.G0(o.x,k.a,"exam_question",B.RH))
+l.push(A.bMW(o,b))
+return new A.am(B.D,n,B.B,B.w,l,n)},
 a14(){var s,r,q,p,o=this,n=null,m=o.gdJ(),l=m.as,k=l.w,j=o.c.B(t.M).f.b===B.K
 if(j)s=(l.ay&&!m.b.$0()?10:n)==null&&l.w+1>=l.c.length
 else if((l.ay&&!m.b.$0()?10:n)==null){r=l.w+1>=l.c.length||m.gTz()
@@ -77074,7 +77076,7 @@ if(d)B.b.D(o,A.a([B.dE,A.bg(m,m,B.q,m,m,B.V9,m,7,m,m,m,m,m,7),B.dE,A.I("\u30a2\u
 o=A.ai(o,B.r,m,B.de,B.h,m)
 if(d)j+="\u3001\u30a2\u30c3\u30d7\u30c7\u30fc\u30c8\u304c\u3042\u308a\u307e\u3059"
 n=new A.V(B.x6,A.av(m,m,new A.bK(new A.aO2(b,c),new A.dx(B.v4,o,m),m,d,!0,m,m,m),!1,m,m,!0,!1,m,m,m,m,m,m,m,m,m,m,j,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m),m)
-return A.a5(A.a([n,A.I("\u203b ea7940ed \xb7 20261101_1709",m,m,m,m,m,A.E(s===B.e?B.P:B.O,m,12,B.n),m,m)],p),B.r,B.f,B.U,B.m)}}
+return A.a5(A.a([n,A.I("\u203b c244565d \xb7 20261101_1711",m,m,m,m,m,A.E(s===B.e?B.P:B.O,m,12,B.n),m,m)],p),B.r,B.f,B.U,B.m)}}
 A.aO3.prototype={
 $3(a,b,c){return this.a.a17(a,this.b,this.c,b===B.uu)},
 $S:1242}
