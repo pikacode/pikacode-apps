@@ -1,81 +1,11 @@
-<!doctype html>
-<!-- JSTQB 网页测试版入口：核对口令（按 build.json 里的盐算 PBKDF2 后比），对了记在本机，转到 app/。
-     App 文件不加密、按需下载，启动进度条按真实字节走（pika 10-30 选 a）；口令只是轻量门槛。 -->
-<html lang="zh">
+<!DOCTYPE html>
+<html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>网页测试版</title>
-  <link rel="stylesheet" href="/assets/site.css">
+  <title>Not Found</title>
 </head>
 <body>
-  <main>
-    <header>
-      <h1>网页测试版</h1>
-      <p id="build" class="note"></p>
-    </header>
-    <section>
-      <form id="f">
-        <p><input id="pw" type="password" inputmode="numeric" autocomplete="off" placeholder="密码" style="font-size:20px;padding:8px;width:10em"></p>
-        <p><button type="submit" style="font-size:18px;padding:8px 20px">打开</button></p>
-      </form>
-      <p id="msg" class="note"></p>
-    </section>
-  </main>
-  <script>
-    // 和 tool/web_test_publish.mjs 同一个记号：app/index.html 开头拿它比，不对就转回这里。
-    const KEY = 'jstqbWebTestPass';
-    const msg = document.getElementById('msg');
-    let info = null;
-
-    // 和 tool/web_test_publish.mjs 同一种算法：PBKDF2-SHA256，盐和次数在 build.json 里（故意慢，同安卓测试包）。
-    async function hash(password) {
-      const s = crypto.subtle;
-      const key = await s.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
-      const bits = await s.deriveBits({ name: 'PBKDF2', salt: new TextEncoder().encode(info.salt), iterations: info.iterations, hash: 'SHA-256' }, key, 256);
-      return [...new Uint8Array(bits)].map((b) => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    // 以前的测试版用 service worker 从解密后的缓存给 App，留着会继续给旧版：注销并清掉。
-    async function dropOldCache() {
-      try {
-        for (const reg of await navigator.serviceWorker?.getRegistrations() ?? []) await reg.unregister();
-        await caches.delete('jstqb-web-test');
-      } catch (_) {}
-    }
-
-    function open() {
-      // 用 replace：入口页不留在浏览历史里，App 里侧滑返回不会退回密码页。
-      location.replace('app/');
-    }
-
-    (async () => {
-      await dropOldCache();
-      try {
-        info = await (await fetch('build.json', { cache: 'no-store' })).json();
-        document.getElementById('build').textContent = '构建时间 ' + info.build;
-      } catch (_) {
-        document.getElementById('build').textContent = '读不到构建时间';
-      }
-      try {
-        // 以前记下的口令（旧入口页存的）对得上就直接换成新记号，不用再输一次。
-        const old = localStorage.getItem('jstqbWebTestPw');
-        if (old && info?.salt && (await hash(old)) === info.pass) localStorage.setItem(KEY, info.pass);
-        localStorage.removeItem('jstqbWebTestPw');
-        localStorage.removeItem('jstqbWebTestBuild');
-      } catch (_) {}
-      if (info?.pass && localStorage.getItem(KEY) === info.pass) open();
-    })();
-
-    document.getElementById('f').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!info?.salt) { msg.textContent = '新版还在发布，请稍后刷新'; return; }
-      msg.textContent = '核对中…';
-      if (await hash(document.getElementById('pw').value) !== info.pass) { msg.textContent = '密码不对'; return; }
-      localStorage.setItem(KEY, info.pass);
-      open();
-    });
-  </script>
+  <p>Not Found</p>
 </body>
 </html>
